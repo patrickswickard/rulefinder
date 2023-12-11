@@ -18,6 +18,18 @@ print(df.index)
 print(df.columns)
 
 
+boring = set()
+boring.add('OBJECTID_1')
+boring.add('OBJECTID')
+boring.add('Date_Accuracy')
+boring.add('GlobalID')
+boring.add('name')
+boring.add('Amount')
+
+print(boring)
+
+nonboring = set(df.columns).difference(boring)
+
 #main = 'Agency'
 #sub = 'Service'
 #main = 'Agency'
@@ -55,15 +67,39 @@ sub = 'Spending_Description'
 # not bad documentation for a file stupidly named chug3.py huh?
 # it's a pretty low bar
 
-set_hash = {}
-for x in df.index:
-  thismain = df[main][x]
-  thissub = df[sub][x]
-  thismainset = set_hash.get(thismain,set())
-  thismainset.add(thissub)
-  set_hash[thismain] = thismainset
+#main = 'Agency'
+#sub = 'Service'
+#main = 'Agency'
+#sub = 'Vendor_Name'
+#main = 'Vendor_Name'
+#sub = 'Agency'
+main = 'Fund'
+sub = 'Spending_Description'
+#main = 'Vendor_Name'
+#sub = 'Amount'
 
-for thiskey in set_hash.keys():
-  print(thiskey)
-  for thisval in set_hash[thiskey]:
-    print('***' + str(thisval))
+def print_crap(df,main,sub):
+  set_hash = {}
+  for x in df.index:
+    thismain = df[main][x]
+    thissub = df[sub][x]
+    thismainset = set_hash.get(thismain,set())
+    thismainset.add(thissub)
+    set_hash[thismain] = thismainset
+
+  for thiskey in set_hash.keys():
+    myset = set_hash[thiskey]
+    if len(myset) == 1:
+      for thisval in myset:
+#        print(myset)
+#        print('Main: ' + main)
+#        print('Sub: ' + sub)
+#        print(thiskey)
+#        print('***' + str(thisval))
+        print('If the ' + str(main) + ' is ' + str(thiskey) + ' then the ' + str(sub) + ' is ' + str(thisval))
+        print('--------------------')
+
+for main in nonboring:
+  for sub in nonboring:
+    if not main == sub:
+      print_crap(df,main,sub)
